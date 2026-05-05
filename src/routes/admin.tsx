@@ -312,9 +312,11 @@ function Field({ label, value, onChange, type = "text" }: { label: string; value
 
 function MessagesPanel() {
   const [list, setList] = useState<ContactMessage[]>([]);
-  const load = () => supabase.from("contact_messages").select("*").order("created_at", { ascending: false })
-    .then(({ data }) => setList((data as ContactMessage[]) || []));
-  useEffect(load, []);
+  const load = () => {
+    supabase.from("contact_messages").select("*").order("created_at", { ascending: false })
+      .then(({ data }) => setList((data as ContactMessage[]) || []));
+  };
+  useEffect(() => { load(); }, []);
 
   const toggleRead = async (m: ContactMessage) => {
     await supabase.from("contact_messages").update({ read: !m.read }).eq("id", m.id);

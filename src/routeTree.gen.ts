@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +20,11 @@ import { Route as BiensIdRouteImport } from './routes/biens.$id'
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/services': typeof ServicesRoute
   '/biens/$id': typeof BiensIdRoute
   '/biens/': typeof BiensIndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/services': typeof ServicesRoute
   '/biens/$id': typeof BiensIdRoute
   '/biens': typeof BiensIndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/services': typeof ServicesRoute
   '/biens/$id': typeof BiensIdRoute
   '/biens/': typeof BiensIndexRoute
@@ -78,16 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/contact'
+    | '/login'
     | '/services'
     | '/biens/$id'
     | '/biens/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/a-propos' | '/contact' | '/services' | '/biens/$id' | '/biens'
+  to:
+    | '/'
+    | '/a-propos'
+    | '/contact'
+    | '/login'
+    | '/services'
+    | '/biens/$id'
+    | '/biens'
   id:
     | '__root__'
     | '/'
     | '/a-propos'
     | '/contact'
+    | '/login'
     | '/services'
     | '/biens/$id'
     | '/biens/'
@@ -97,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   ContactRoute: typeof ContactRoute
+  LoginRoute: typeof LoginRoute
   ServicesRoute: typeof ServicesRoute
   BiensIdRoute: typeof BiensIdRoute
   BiensIndexRoute: typeof BiensIndexRoute
@@ -109,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -153,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   ContactRoute: ContactRoute,
+  LoginRoute: LoginRoute,
   ServicesRoute: ServicesRoute,
   BiensIdRoute: BiensIdRoute,
   BiensIndexRoute: BiensIndexRoute,
@@ -160,3 +187,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

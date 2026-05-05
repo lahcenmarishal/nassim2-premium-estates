@@ -1,17 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { BedDouble, Bath, Maximize, MapPin } from "lucide-react";
-import { formatPrice, type Property } from "@/data/properties";
+import { formatPrice, type DbProperty } from "@/lib/db-types";
+import fallback from "@/assets/property-1.jpg";
 
-export function PropertyCard({ p }: { p: Property }) {
+export function PropertyCard({ p }: { p: DbProperty }) {
   return (
     <Link
       to="/biens/$id"
-      params={{ id: p.id }}
+      params={{ id: p.slug }}
       className="group block bg-card rounded-lg overflow-hidden border border-border hover:shadow-2xl hover:shadow-ink/10 transition-all duration-500 hover:-translate-y-1"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={p.image}
+          src={p.image_url || fallback}
           alt={p.title}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"

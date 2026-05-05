@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BiensIndexRouteImport } from './routes/biens.index'
+import { Route as BiensIdRouteImport } from './routes/biens.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const BiensIndexRoute = BiensIndexRouteImport.update({
   path: '/biens/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BiensIdRoute = BiensIdRouteImport.update({
+  id: '/biens/$id',
+  path: '/biens/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/biens/$id': typeof BiensIdRoute
   '/biens/': typeof BiensIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/biens/$id': typeof BiensIdRoute
   '/biens': typeof BiensIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/biens/$id': typeof BiensIdRoute
   '/biens/': typeof BiensIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/biens/'
+  fullPaths: '/' | '/biens/$id' | '/biens/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/biens'
-  id: '__root__' | '/' | '/biens/'
+  to: '/' | '/biens/$id' | '/biens'
+  id: '__root__' | '/' | '/biens/$id' | '/biens/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BiensIdRoute: typeof BiensIdRoute
   BiensIndexRoute: typeof BiensIndexRoute
 }
 
@@ -65,11 +75,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BiensIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biens/$id': {
+      id: '/biens/$id'
+      path: '/biens/$id'
+      fullPath: '/biens/$id'
+      preLoaderRoute: typeof BiensIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BiensIdRoute: BiensIdRoute,
   BiensIndexRoute: BiensIndexRoute,
 }
 export const routeTree = rootRouteImport

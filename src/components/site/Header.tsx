@@ -13,29 +13,9 @@ const nav = [
 ];
 
 export function Header() {
-  const { pathname } = useLocation();
-  const isHome = pathname === "/";
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const transparent = isHome && !scrolled;
-
   return (
-    <header
-      className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-500",
-        transparent
-          ? "bg-transparent"
-          : "bg-background/90 backdrop-blur-lg border-b border-border shadow-sm",
-      )}
-    >
+    <header className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-lg border-b border-border shadow-sm">
       <div className="container-page flex items-center justify-between h-20">
         <Link to="/" className="flex items-center gap-3 shrink-0" onClick={() => setOpen(false)}>
           <img src={logo} alt="Nassim2 — Agence Immobilière El Jadida" className="h-14 w-auto" />
@@ -46,9 +26,8 @@ export function Header() {
               key={n.to}
               to={n.to}
               className={cn(
-                "text-sm font-medium tracking-wide transition-colors relative",
+                "text-sm font-medium tracking-wide transition-colors relative text-ink hover:text-gold",
                 "after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-gold after:transition-all hover:after:w-full",
-                transparent ? "text-white/90 hover:text-white" : "text-foreground hover:text-gold",
               )}
               activeProps={{ className: "text-gold after:w-full" }}
               activeOptions={{ exact: n.to === "/" }}
@@ -61,18 +40,13 @@ export function Header() {
           href="https://wa.me/212661765804"
           target="_blank"
           rel="noreferrer"
-          className={cn(
-            "hidden md:inline-flex items-center justify-center h-10 px-5 rounded-md text-sm font-medium transition-all",
-            transparent
-              ? "bg-white/10 backdrop-blur border border-white/30 text-white hover:bg-white/20"
-              : "bg-gold text-gold-foreground hover:bg-gold/90",
-          )}
+          className="hidden md:inline-flex items-center justify-center h-10 px-5 rounded-md text-sm font-medium transition-all bg-gold text-gold-foreground hover:bg-gold/90"
         >
           +212 661 765 804
         </a>
         <button
           onClick={() => setOpen((v) => !v)}
-          className={cn("md:hidden p-2", transparent ? "text-white" : "text-foreground")}
+          className="md:hidden p-2 text-ink"
           aria-label="Menu"
         >
           {open ? <X /> : <Menu />}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { SiteSettings, DbProperty } from "@/lib/db-types";
+import type { SiteSettings, DbProperty, Testimonial } from "@/lib/db-types";
 
 export function useSiteSettings() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -39,4 +39,18 @@ export function useProperty(slug: string) {
     });
   }, [slug]);
   return { property, loading };
+}
+
+export function useTestimonials(opts?: { limit?: number }) {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let q = supabase.from("testimonials").select("*").eq("published", true).order("sort_order", { ascending: true });
+    if (opts?.limit) q = q.limit(opts.limit);
+    q.then(({ data }) => {
+      setTestimonials((data as Testimonial[]) || []);
+      setLoading(false);
+    });
+  }, [opts?.limit]);
+  return { testimonials, loading };
 }

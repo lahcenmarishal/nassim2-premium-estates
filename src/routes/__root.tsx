@@ -34,10 +34,14 @@ export const Route = createRootRoute({
       { title: "Nassim2 — Agence Immobilière El Jadida" },
       { name: "description", content: "Agence Nassim2 : achat, vente et location de biens immobiliers premium à El Jadida." },
       { property: "og:title", content: "Nassim2 — Agence Immobilière El Jadida" },
-      { property: "og:description", content: "Votre partenaire de confiance pour l'immobilier à El Jadida." },
+      { property: "og:description", content: "Agence Nassim2 : achat, vente et location de biens immobiliers premium à El Jadida." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Nassim2 — Agence Immobilière El Jadida" },
+      { name: "twitter:description", content: "Agence Nassim2 : achat, vente et location de biens immobiliers premium à El Jadida." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/30aUEL9v0SMb9YJojR8LBTu73Sq2/social-images/social-1778016756977-WhatsApp_Image_2026-05-04_at_10.41.42-removebg-preview.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/30aUEL9v0SMb9YJojR8LBTu73Sq2/social-images/social-1778016756977-WhatsApp_Image_2026-05-04_at_10.41.42-removebg-preview.webp" },
     ],
     links: [
       {

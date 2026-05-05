@@ -2,15 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { PropertyCard } from "@/components/site/PropertyCard";
-import { properties } from "@/data/properties";
+import { useProperties } from "@/hooks/useSiteData";
 
 export const Route = createFileRoute("/biens/")({
   head: () => ({
     meta: [
       { title: "Biens immobiliers — Nassim2 El Jadida" },
       { name: "description", content: "Découvrez nos appartements, villas, riads et terrains à vendre ou à louer à El Jadida." },
-      { property: "og:title", content: "Biens immobiliers — Nassim2 El Jadida" },
-      { property: "og:description", content: "Sélection premium de biens à El Jadida." },
     ],
   }),
   component: BiensPage,
@@ -20,6 +18,7 @@ function BiensPage() {
   const [listing, setListing] = useState<string>("all");
   const [type, setType] = useState<string>("all");
   const [maxPrice, setMaxPrice] = useState<string>("");
+  const { properties, loading } = useProperties();
 
   const filtered = useMemo(() => {
     return properties.filter((p) => {
@@ -28,7 +27,7 @@ function BiensPage() {
       if (maxPrice && p.price > Number(maxPrice)) return false;
       return true;
     });
-  }, [listing, type, maxPrice]);
+  }, [properties, listing, type, maxPrice]);
 
   return (
     <>
@@ -57,7 +56,9 @@ function BiensPage() {
               <option value="20000000">20M DH</option>
             </select>
           </div>
-          {filtered.length === 0 ? (
+          {loading ? (
+            <p className="text-center text-muted-foreground py-20">Chargement…</p>
+          ) : filtered.length === 0 ? (
             <p className="text-center text-muted-foreground py-20">Aucun bien ne correspond à votre recherche.</p>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

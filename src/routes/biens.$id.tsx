@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, BedDouble, Bath, Maximize, MapPin, Phone, MessageCircle, Check } from "lucide-react";
-import { properties, formatPrice } from "@/data/properties";
+import { properties, formatPrice, type Property } from "@/data/properties";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/biens/$id")({
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/biens/$id")({
 });
 
 function PropertyDetail() {
-  const { property: p } = Route.useLoaderData();
+  const { property: p } = Route.useLoaderData() as { property: Property };
   const [active, setActive] = useState(0);
   const waMsg = encodeURIComponent(`Bonjour, je suis intéressé(e) par : ${p.title}`);
 

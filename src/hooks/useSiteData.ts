@@ -5,11 +5,21 @@ import type { SiteSettings, DbProperty, Testimonial } from "@/lib/db-types";
 export function useSiteSettings() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
+  const [tick, setTick] = useState(0);
   useEffect(() => {
     supabase.from("site_settings").select("*").maybeSingle().then(({ data }) => {
       setSettings(data as SiteSettings | null);
       setLoading(false);
     });
+  }, [tick]);
+  useEffect(() => {
+    const handler = () => setTick((t) => t + 1);
+    window.addEventListener("site-settings-updated", handler);
+    window.addEventListener("focus", handler);
+    return () => {
+      window.removeEventListener("site-settings-updated", handler);
+      window.removeEventListener("focus", handler);
+    };
   }, []);
   return { settings, loading };
 }

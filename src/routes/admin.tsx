@@ -99,7 +99,8 @@ function HeroPanel() {
       why_image_1_url: s.why_image_1_url, why_image_2_url: s.why_image_2_url, why_image_3_url: s.why_image_3_url,
     }).eq("id", s.id);
     setSaving(false);
-    if (error) toast.error(error.message); else toast.success("Enregistré");
+    if (error) toast.error(error.message);
+    else { toast.success("Enregistré"); window.dispatchEvent(new Event("site-settings-updated")); }
   };
 
   return (
@@ -139,7 +140,8 @@ function ContactInfoPanel() {
       instagram_url: s.instagram_url, facebook_url: s.facebook_url,
     }).eq("id", s.id);
     setSaving(false);
-    if (error) toast.error(error.message); else toast.success("Enregistré");
+    if (error) toast.error(error.message);
+    else { toast.success("Enregistré"); window.dispatchEvent(new Event("site-settings-updated")); }
   };
 
   const fields: [keyof SiteSettings, string, string?][] = [

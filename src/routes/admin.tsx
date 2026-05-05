@@ -354,3 +354,93 @@ function MessagesPanel() {
     </div>
   );
 }
+
+function TestimonialsPanel() {
+  const [list, setList] = useState<Testimonial[]>([]);
+  const [editing, setEditing] = useState<Testimonial | null>(null);
+
+  const load = () => {
+    supabase.from("testimonials").select("*").order("sort_order", { ascending: true })
+      .then(({ data }) => setList((data as Testimonial[]) || []));
+  };
+  useEffect(() => { load(); }, []);
+
+  const blank = (): Testimonial => ({
+    id: "", name: "", role: "", content: "", avatar_url: null,
+    rating: 5, published: true, sort_order: list.length, created_at: "",
+  });
+
+  const remove = async (id: string) => {
+    if (!confirm("Supprimer ce témoignage ?")) return;
+    const { error } = await supabase.from("testimonials").delete().eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("Supprimé"); load(); }
+  };
+
+  if (editing) return <TestimonialForm t={editing} onClose={() => { setEditing(null); load(); }} />;
+
+  return (
+    <div className="bg-card border border-border rounded-lg p-8">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="font-display text-2xl">Témoignages ({list.length})</h2>
+        <Button variant="gold" onClick={() => setEditing(blank())}><Plus className="h-4 w-4" /> Ajouter</Button>
+      </div>
+      <div className="space-y-2">
+        {list.map((t) => (
+          <div key={t.id} className="flex items-center gap-4 p-3 border border-border rounded-md">
+            <div className="flex-1 min-w-0">
+              <div className="font-medium">{t.name} <span className="text-xs text-muted-foreground">— {t.role}</span></div>
+              <div className="text-xs text-muted-foreground line-clamp-1">{t.content}</div>
+              <div className="flex gap-0.5 mt-1">
+                {Array.from({ length: t.rating }).map((_, i) => <Star key={i} className="h-3 w-3 fill-gold text-gold" />)}
+                {!t.published && <span className="text-xs text-muted-foreground ml-2">(non publié)</span>}
+              </div>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setEditing(t)}><Edit className="h-3 w-3" /></Button>
+            <Button variant="outline" size="sm" onClick={() => remove(t.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TestimonialForm({ t, onClose }: { t: Testimonial; onClose: () => void }) {
+  const [v, setV] = useState<Testimonial>(t);
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    if (!v.name || !v.content) return toast.error("Nom et témoignage requis");
+    setSaving(true);
+    const payload = {
+      name: v.name, role: v.role, content: v.content, avatar_url: v.avatar_url,
+      rating: Number(v.rating), published: v.published, sort_order: Number(v.sort_order),
+    };
+    const { error } = v.id
+      ? await supabase.from("testimonials").update(payload).eq("id", v.id)
+      : await supabase.from("testimonials").insert(payload);
+    setSaving(false);
+    if (error) toast.error(error.message); else { toast.success("Enregistré"); onClose(); }
+  };
+
+  return (
+    <div className="bg-card border border-border rounded-lg p-8 space-y-4">
+      <div className="flex justify-between mb-4">
+        <h2 className="font-display text-2xl">{v.id ? "Modifier témoignage" : "Nouveau témoignage"}</h2>
+        <Button variant="outline" onClick={onClose}>Annuler</Button>
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <Field label="Nom *" value={v.name} onChange={(x) => setV({ ...v, name: x })} />
+        <Field label="Rôle / Statut" value={v.role || ""} onChange={(x) => setV({ ...v, role: x })} />
+        <Field label="Note (1-5)" type="number" value={String(v.rating)} onChange={(x) => setV({ ...v, rating: Math.max(1, Math.min(5, Number(x))) })} />
+        <Field label="Ordre d'affichage" type="number" value={String(v.sort_order)} onChange={(x) => setV({ ...v, sort_order: Number(x) })} />
+      </div>
+      <div>
+        <label className="text-xs uppercase tracking-widest text-muted-foreground">Témoignage *</label>
+        <textarea value={v.content} rows={5} onChange={(e) => setV({ ...v, content: e.target.value })} className="mt-2 w-full px-4 py-3 border border-border rounded-md bg-background" />
+      </div>
+      <ImageUpload bucket="site-images" label="Photo (optionnel)" value={v.avatar_url} onChange={(url) => setV({ ...v, avatar_url: url })} />
+      <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={v.published} onChange={(e) => setV({ ...v, published: e.target.checked })} /> Publié</label>
+      <Button onClick={save} disabled={saving} variant="gold" size="lg"><Check className="h-4 w-4" /> Enregistrer</Button>
+    </div>
+  );
+}

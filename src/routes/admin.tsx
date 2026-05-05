@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/admin/ImageUpload";
-import type { SiteSettings, DbProperty, ContactMessage } from "@/lib/db-types";
-import { LogOut, Plus, Trash2, Edit, Check, Mail, MailOpen } from "lucide-react";
+import type { SiteSettings, DbProperty, ContactMessage, Testimonial } from "@/lib/db-types";
+import { LogOut, Plus, Trash2, Edit, Check, Mail, MailOpen, Star } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "hero" | "contact-info" | "properties" | "messages";
+type Tab = "hero" | "contact-info" | "properties" | "testimonials" | "messages";
 
 function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
@@ -56,6 +56,7 @@ function AdminPage() {
             ["hero", "Hero & Images"],
             ["contact-info", "Coordonnées"],
             ["properties", "Biens"],
+            ["testimonials", "Témoignages"],
             ["messages", "Messages"],
           ] as [Tab, string][]).map(([k, l]) => (
             <button key={k} onClick={() => setTab(k)} className={`px-4 py-3 text-sm font-medium transition border-b-2 ${tab === k ? "border-gold text-gold" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
@@ -67,6 +68,7 @@ function AdminPage() {
         {tab === "hero" && <HeroPanel />}
         {tab === "contact-info" && <ContactInfoPanel />}
         {tab === "properties" && <PropertiesPanel />}
+        {tab === "testimonials" && <TestimonialsPanel />}
         {tab === "messages" && <MessagesPanel />}
       </div>
     </div>

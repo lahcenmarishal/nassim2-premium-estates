@@ -6,14 +6,14 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings } from "@/hooks/useSiteData";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Nassim2 El Jadida" },
-      { name: "description", content: "Contactez l'agence Nassim2 à El Jadida : téléphone, WhatsApp, formulaire et adresse." },
-      { property: "og:title", content: "Contact — Nassim2 El Jadida" },
-      { property: "og:description", content: "Une équipe à votre écoute pour votre projet immobilier." },
+      { name: "description", content: "Contactez l'agence Nassim2 à El Jadida." },
     ],
   }),
   component: ContactPage,
@@ -27,22 +27,34 @@ const schema = z.object({
 });
 
 function ContactPage() {
+  const { settings } = useSiteSettings();
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [sending, setSending] = useState(false);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse(form);
     if (!result.success) {
       toast.error(result.error.issues[0].message);
       return;
     }
-    const wa = `https://wa.me/212661765804?text=${encodeURIComponent(
-      `Bonjour, je suis ${form.name} (${form.email}). ${form.message}`,
-    )}`;
-    window.open(wa, "_blank");
-    toast.success("Merci ! Votre message est prêt à être envoyé via WhatsApp.");
+    setSending(true);
+    const { error } = await supabase.from("contact_messages").insert({
+      name: form.name, email: form.email, phone: form.phone || null, message: form.message,
+    });
+    setSending(false);
+    if (error) {
+      toast.error("Erreur lors de l'envoi.");
+      return;
+    }
+    toast.success("Message envoyé ! Nous vous répondrons rapidement.");
     setForm({ name: "", email: "", phone: "", message: "" });
   };
+
+  const phone = settings?.phone || "+212 661 765 804";
+  const wa = settings?.whatsapp || "212661765804";
+  const email = settings?.email || "contact@nassim2.ma";
+  const address = settings?.address || "El Jadida, Maroc";
 
   return (
     <>
@@ -57,39 +69,34 @@ function ContactPage() {
                 <div className="h-12 w-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0"><Phone className="h-5 w-5 text-gold" /></div>
                 <div>
                   <div className="text-xs uppercase tracking-widest text-muted-foreground">Téléphone</div>
-                  <a href="tel:+212661765804" className="text-lg hover:text-gold transition">+212 661 765 804</a>
+                  <a href={`tel:${phone}`} className="text-lg hover:text-gold transition">{phone}</a>
                 </div>
               </li>
               <li className="flex gap-4">
                 <div className="h-12 w-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0"><MessageCircle className="h-5 w-5 text-gold" /></div>
                 <div>
                   <div className="text-xs uppercase tracking-widest text-muted-foreground">WhatsApp</div>
-                  <a href="https://wa.me/212661765804" target="_blank" rel="noreferrer" className="text-lg hover:text-gold transition">Discuter en direct</a>
+                  <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer" className="text-lg hover:text-gold transition">Discuter en direct</a>
                 </div>
               </li>
               <li className="flex gap-4">
                 <div className="h-12 w-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0"><Mail className="h-5 w-5 text-gold" /></div>
                 <div>
                   <div className="text-xs uppercase tracking-widest text-muted-foreground">Email</div>
-                  <a href="mailto:contact@nassim2.ma" className="text-lg hover:text-gold transition">contact@nassim2.ma</a>
+                  <a href={`mailto:${email}`} className="text-lg hover:text-gold transition">{email}</a>
                 </div>
               </li>
               <li className="flex gap-4">
                 <div className="h-12 w-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0"><MapPin className="h-5 w-5 text-gold" /></div>
                 <div>
                   <div className="text-xs uppercase tracking-widest text-muted-foreground">Adresse</div>
-                  <p className="text-lg">El Jadida, Maroc</p>
+                  <p className="text-lg">{address}</p>
                 </div>
               </li>
             </ul>
 
             <div className="mt-10 aspect-[4/3] overflow-hidden rounded-lg border border-border">
-              <iframe
-                title="El Jadida Maps"
-                src="https://www.google.com/maps?q=El+Jadida,+Morocco&output=embed"
-                className="w-full h-full"
-                loading="lazy"
-              />
+              <iframe title="El Jadida Maps" src="https://www.google.com/maps?q=El+Jadida,+Morocco&output=embed" className="w-full h-full" loading="lazy" />
             </div>
           </div>
 
@@ -115,8 +122,8 @@ function ContactPage() {
                 <label className="text-xs uppercase tracking-widest text-muted-foreground">Message *</label>
                 <textarea maxLength={1000} rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-2 w-full px-4 py-3 border border-border rounded-md bg-background focus:border-gold outline-none transition resize-none" />
               </div>
-              <Button type="submit" variant="gold" size="lg" className="w-full">
-                <Send className="h-4 w-4" /> Envoyer le message
+              <Button type="submit" variant="gold" size="lg" className="w-full" disabled={sending}>
+                <Send className="h-4 w-4" /> {sending ? "Envoi…" : "Envoyer le message"}
               </Button>
             </div>
           </form>

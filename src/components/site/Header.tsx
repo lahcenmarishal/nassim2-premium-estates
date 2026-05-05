@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
+import { useSiteSettings } from "@/hooks/useSiteData";
 
 const nav = [
   { to: "/", label: "Accueil" },
@@ -14,6 +15,9 @@ const nav = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { settings } = useSiteSettings();
+  const phone = settings?.phone || "+212 661 765 804";
+  const wa = settings?.whatsapp || "212661765804";
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-lg border-b border-border shadow-sm">
       <div className="container-page flex items-center justify-between h-28">
@@ -37,12 +41,12 @@ export function Header() {
           ))}
         </nav>
         <a
-          href="https://wa.me/212661765804"
+          href={`https://wa.me/${wa}`}
           target="_blank"
           rel="noreferrer"
           className="hidden md:inline-flex items-center justify-center h-10 px-5 rounded-md text-sm font-medium transition-all bg-gold text-gold-foreground hover:bg-gold/90"
         >
-          +212 661 765 804
+          {phone}
         </a>
         <button
           onClick={() => setOpen((v) => !v)}
@@ -67,10 +71,10 @@ export function Header() {
               </Link>
             ))}
             <a
-              href="https://wa.me/212661765804"
+              href={`https://wa.me/${wa}`}
               className="mt-2 inline-flex h-11 items-center justify-center rounded-md bg-gold text-gold-foreground font-medium"
             >
-              WhatsApp +212 661 765 804
+              WhatsApp {phone}
             </a>
           </div>
         </div>

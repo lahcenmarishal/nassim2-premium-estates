@@ -1,10 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search, ShieldCheck, Award, HeartHandshake, Sparkles, ArrowRight, Quote, Star, Phone } from "lucide-react";
-import hero from "@/assets/hero.jpg";
+import heroFallback from "@/assets/hero.jpg";
+import p1 from "@/assets/property-1.jpg";
+import p2 from "@/assets/property-2.jpg";
+import p3 from "@/assets/property-3.jpg";
 import { Button } from "@/components/ui/button";
-import { properties } from "@/data/properties";
 import { PropertyCard } from "@/components/site/PropertyCard";
+import { useSiteSettings, useProperties } from "@/hooks/useSiteData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,49 +24,42 @@ export const Route = createFileRoute("/")({
 function Home() {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({ listing: "achat", type: "", budget: "" });
+  const { settings } = useSiteSettings();
+  const { properties } = useProperties({ limit: 3 });
 
-  const recents = properties.slice(0, 3);
+  const heroImg = settings?.hero_image_url || heroFallback;
+  const why1 = settings?.why_image_1_url || p1;
+  const why2 = settings?.why_image_2_url || p2;
+  const why3 = settings?.why_image_3_url || p3;
+  const phone = settings?.phone || "+212 661 765 804";
+  const wa = settings?.whatsapp || "212661765804";
 
   return (
     <>
-      {/* HERO */}
       <section className="relative min-h-screen flex items-center justify-center text-white">
-        <img src={hero} alt="Villa de luxe à El Jadida" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={heroImg} alt="Hero" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/50 to-ink/85" />
         <div className="relative z-10 container-page text-center pt-32 pb-20">
           <span className="inline-block uppercase tracking-[0.3em] text-xs text-gold mb-6 animate-fade-in">
             Agence Immobilière — El Jadida
           </span>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light leading-[1.05] mb-6 animate-fade-up">
-            L'art de vivre <em className="text-gold not-italic">l'immobilier</em>
-            <br />à El Jadida
+            {settings?.hero_title || "L'art de vivre l'immobilier à El Jadida"}
           </h1>
           <p className="max-w-2xl mx-auto text-lg text-white/80 mb-10 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            Votre partenaire de confiance pour l'achat, la vente et la location de biens d'exception.
+            {settings?.hero_subtitle || "Votre partenaire de confiance pour l'achat, la vente et la location de biens d'exception."}
           </p>
 
-          {/* Search */}
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate({ to: "/biens" });
-            }}
+            onSubmit={(e) => { e.preventDefault(); navigate({ to: "/biens" }); }}
             className="max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-xl p-3 grid md:grid-cols-[1fr_1fr_1fr_auto] gap-2 shadow-2xl animate-fade-up"
             style={{ animationDelay: "0.4s" }}
           >
-            <select
-              value={filters.listing}
-              onChange={(e) => setFilters({ ...filters, listing: e.target.value })}
-              className="h-12 px-4 rounded-md bg-transparent text-foreground border border-border md:border-0 md:border-r"
-            >
+            <select value={filters.listing} onChange={(e) => setFilters({ ...filters, listing: e.target.value })} className="h-12 px-4 rounded-md bg-transparent text-foreground border border-border md:border-0 md:border-r">
               <option value="achat">Achat</option>
               <option value="location">Location</option>
             </select>
-            <select
-              value={filters.type}
-              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-              className="h-12 px-4 rounded-md bg-transparent text-foreground border border-border md:border-0 md:border-r"
-            >
+            <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })} className="h-12 px-4 rounded-md bg-transparent text-foreground border border-border md:border-0 md:border-r">
               <option value="">Tout type</option>
               <option value="appartement">Appartement</option>
               <option value="villa">Villa</option>
@@ -71,11 +67,7 @@ function Home() {
               <option value="terrain">Terrain</option>
               <option value="penthouse">Penthouse</option>
             </select>
-            <select
-              value={filters.budget}
-              onChange={(e) => setFilters({ ...filters, budget: e.target.value })}
-              className="h-12 px-4 rounded-md bg-transparent text-foreground border border-border md:border-0"
-            >
+            <select value={filters.budget} onChange={(e) => setFilters({ ...filters, budget: e.target.value })} className="h-12 px-4 rounded-md bg-transparent text-foreground border border-border md:border-0">
               <option value="">Budget</option>
               <option value="1">Jusqu'à 1M DH</option>
               <option value="3">1 à 3M DH</option>
@@ -97,7 +89,6 @@ function Home() {
         </div>
       </section>
 
-      {/* FEATURED */}
       <section className="py-24 bg-background">
         <div className="container-page">
           <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
@@ -110,12 +101,11 @@ function Home() {
             </Link>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recents.map((p) => <PropertyCard key={p.id} p={p} />)}
+            {properties.map((p) => <PropertyCard key={p.id} p={p} />)}
           </div>
         </div>
       </section>
 
-      {/* SERVICES */}
       <section className="py-24 bg-cream">
         <div className="container-page">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -140,7 +130,6 @@ function Home() {
         </div>
       </section>
 
-      {/* WHY US */}
       <section className="py-24 bg-ink text-primary-foreground">
         <div className="container-page grid lg:grid-cols-2 gap-16 items-center">
           <div>
@@ -167,21 +156,20 @@ function Home() {
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div className="col-span-2 aspect-[4/5] overflow-hidden rounded-lg">
-              <img src={recents[0].image} alt="" loading="lazy" className="h-full w-full object-cover" />
+              <img src={why1} alt="" loading="lazy" className="h-full w-full object-cover" />
             </div>
             <div className="space-y-4">
               <div className="aspect-square overflow-hidden rounded-lg">
-                <img src={recents[1].image} alt="" loading="lazy" className="h-full w-full object-cover" />
+                <img src={why2} alt="" loading="lazy" className="h-full w-full object-cover" />
               </div>
               <div className="aspect-square overflow-hidden rounded-lg">
-                <img src={recents[2].image} alt="" loading="lazy" className="h-full w-full object-cover" />
+                <img src={why3} alt="" loading="lazy" className="h-full w-full object-cover" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
       <section className="py-24 bg-background">
         <div className="container-page">
           <div className="text-center mb-14">
@@ -212,7 +200,6 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-24 bg-gradient-to-br from-gold/95 to-gold">
         <div className="container-page text-center">
           <h2 className="font-display text-4xl md:text-5xl text-ink mb-4">Prêt à concrétiser votre projet ?</h2>
@@ -222,7 +209,7 @@ function Home() {
               <Link to="/contact">Nous contacter</Link>
             </Button>
             <Button asChild variant="outline" size="xl" className="bg-transparent border-ink text-ink hover:bg-ink hover:text-primary-foreground">
-              <a href="https://wa.me/212661765804" target="_blank" rel="noreferrer"><Phone className="h-4 w-4" /> +212 661 765 804</a>
+              <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer"><Phone className="h-4 w-4" /> {phone}</a>
             </Button>
           </div>
         </div>

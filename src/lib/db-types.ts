@@ -45,6 +45,18 @@ export interface ContactMessage {
   created_at: string;
 }
 
+export interface Testimonial {
+  id: string;
+  name: string;
+  role: string | null;
+  content: string;
+  avatar_url: string | null;
+  rating: number;
+  published: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
 export function formatPrice(p: Pick<DbProperty, "price" | "listing">) {
   const fmt = new Intl.NumberFormat("fr-FR").format(p.price);
   return p.listing === "location" ? `${fmt} DH / mois` : `${fmt} DH`;

@@ -7,7 +7,7 @@ import p2 from "@/assets/property-2.jpg";
 import p3 from "@/assets/property-3.jpg";
 import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/site/PropertyCard";
-import { useSiteSettings, useProperties } from "@/hooks/useSiteData";
+import { useSiteSettings, useProperties, useTestimonials } from "@/hooks/useSiteData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,6 +26,7 @@ function Home() {
   const [filters, setFilters] = useState({ listing: "achat", type: "", budget: "" });
   const { settings } = useSiteSettings();
   const { properties } = useProperties({ limit: 3 });
+  const { testimonials } = useTestimonials({ limit: 3 });
 
   const heroImg = settings?.hero_image_url || heroFallback;
   const why1 = settings?.why_image_1_url || p1;
@@ -177,25 +178,26 @@ function Home() {
             <h2 className="font-display text-4xl md:text-5xl mt-3">Ils nous ont fait confiance</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: "Karim B.", role: "Acquéreur villa", text: "Une équipe à l'écoute et d'une grande discrétion. Nassim2 m'a trouvé la villa de mes rêves en moins de deux mois." },
-              { name: "Sophia L.", role: "Investisseuse", text: "Professionnalisme exemplaire, conseils avisés sur le marché d'El Jadida. Je recommande sans réserve." },
-              { name: "Mohamed R.", role: "Vendeur appartement", text: "Vente conclue au prix souhaité grâce à un accompagnement irréprochable. Merci à toute l'équipe." },
-            ].map((t) => (
-              <div key={t.name} className="bg-card border border-border rounded-lg p-8">
+            {testimonials.map((t) => (
+              <div key={t.id} className="bg-card border border-border rounded-lg p-8">
                 <Quote className="h-8 w-8 text-gold mb-4" />
-                <p className="text-foreground leading-relaxed mb-6 italic">"{t.text}"</p>
+                <p className="text-foreground leading-relaxed mb-6 italic">"{t.content}"</p>
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-medium">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                    {t.role && <div className="text-xs text-muted-foreground">{t.role}</div>}
                   </div>
                   <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-gold text-gold" />)}
+                    {Array.from({ length: t.rating }).map((_, i) => <Star key={i} className="h-4 w-4 fill-gold text-gold" />)}
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Button asChild variant="ink" size="lg">
+              <Link to="/temoignages">Voir tous les témoignages <ArrowRight className="h-4 w-4" /></Link>
+            </Button>
           </div>
         </div>
       </section>

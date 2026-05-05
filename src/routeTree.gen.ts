@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BiensIndexRouteImport } from './routes/biens.index'
 import { Route as BiensIdRouteImport } from './routes/biens.$id'
@@ -17,6 +18,11 @@ import { Route as BiensIdRouteImport } from './routes/biens.$id'
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const BiensIdRoute = BiensIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/services': typeof ServicesRoute
   '/biens/$id': typeof BiensIdRoute
   '/biens/': typeof BiensIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/services': typeof ServicesRoute
   '/biens/$id': typeof BiensIdRoute
   '/biens': typeof BiensIndexRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/services': typeof ServicesRoute
   '/biens/$id': typeof BiensIdRoute
   '/biens/': typeof BiensIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/services' | '/biens/$id' | '/biens/'
+  fullPaths: '/' | '/a-propos' | '/services' | '/biens/$id' | '/biens/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/services' | '/biens/$id' | '/biens'
-  id: '__root__' | '/' | '/services' | '/biens/$id' | '/biens/'
+  to: '/' | '/a-propos' | '/services' | '/biens/$id' | '/biens'
+  id: '__root__' | '/' | '/a-propos' | '/services' | '/biens/$id' | '/biens/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
   ServicesRoute: typeof ServicesRoute
   BiensIdRoute: typeof BiensIdRoute
   BiensIndexRoute: typeof BiensIndexRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
   ServicesRoute: ServicesRoute,
   BiensIdRoute: BiensIdRoute,
   BiensIndexRoute: BiensIndexRoute,

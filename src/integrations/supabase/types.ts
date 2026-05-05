@@ -14,16 +14,198 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          read: boolean
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          read?: boolean
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          read?: boolean
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          area: number
+          bathrooms: number
+          bedrooms: number
+          city: string
+          created_at: string
+          description: string
+          district: string
+          featured: boolean
+          features: string[]
+          gallery: string[]
+          id: string
+          image_url: string | null
+          listing: string
+          price: number
+          published: boolean
+          slug: string
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          area?: number
+          bathrooms?: number
+          bedrooms?: number
+          city: string
+          created_at?: string
+          description?: string
+          district: string
+          featured?: boolean
+          features?: string[]
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          listing: string
+          price: number
+          published?: boolean
+          slug: string
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          area?: number
+          bathrooms?: number
+          bedrooms?: number
+          city?: string
+          created_at?: string
+          description?: string
+          district?: string
+          featured?: boolean
+          features?: string[]
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          listing?: string
+          price?: number
+          published?: boolean
+          slug?: string
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          facebook_url: string | null
+          hero_image_url: string | null
+          hero_subtitle: string
+          hero_title: string
+          id: string
+          instagram_url: string | null
+          phone: string | null
+          singleton: boolean
+          updated_at: string
+          whatsapp: string | null
+          why_image_1_url: string | null
+          why_image_2_url: string | null
+          why_image_3_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          facebook_url?: string | null
+          hero_image_url?: string | null
+          hero_subtitle?: string
+          hero_title?: string
+          id?: string
+          instagram_url?: string | null
+          phone?: string | null
+          singleton?: boolean
+          updated_at?: string
+          whatsapp?: string | null
+          why_image_1_url?: string | null
+          why_image_2_url?: string | null
+          why_image_3_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          facebook_url?: string | null
+          hero_image_url?: string | null
+          hero_subtitle?: string
+          hero_title?: string
+          id?: string
+          instagram_url?: string | null
+          phone?: string | null
+          singleton?: boolean
+          updated_at?: string
+          whatsapp?: string | null
+          why_image_1_url?: string | null
+          why_image_2_url?: string | null
+          why_image_3_url?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +332,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

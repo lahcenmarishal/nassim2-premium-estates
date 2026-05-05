@@ -16,9 +16,9 @@ export function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-lg border-b border-border shadow-sm">
-      <div className="container-page flex items-center justify-between h-20">
+      <div className="container-page flex items-center justify-between h-28">
         <Link to="/" className="flex items-center gap-3 shrink-0" onClick={() => setOpen(false)}>
-          <img src={logo} alt="Nassim2 — Agence Immobilière El Jadida" className="h-14 w-auto" />
+          <img src={logo} alt="Nassim2 — Agence Immobilière El Jadida" className="h-24 w-auto" />
         </Link>
         <nav className="hidden md:flex items-center gap-9">
           {nav.map((n) => (

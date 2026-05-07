@@ -38,7 +38,7 @@ function PropertyDetail() {
         </Link>
       </div>
 
-      <div className="container-page grid lg:grid-cols-[2fr_1fr] gap-12 py-6">
+      <div className="container-page grid lg:grid-cols-[2fr_1fr] gap-8 lg:gap-12 py-6">
         <div className="space-y-3">
           <div className="aspect-[16/9] overflow-hidden rounded-lg bg-muted">
             <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
@@ -47,7 +47,7 @@ function PropertyDetail() {
             <Carousel opts={{ align: "start", dragFree: true }} className="relative px-10">
               <CarouselContent className="-ml-2">
                 {gallery.map((img, i) => (
-                  <CarouselItem key={i} className="pl-2 basis-1/4">
+                  <CarouselItem key={i} className="pl-2 basis-1/3 sm:basis-1/4">
                     <button
                       onClick={() => setActive(i)}
                       className={`block w-full aspect-[4/3] overflow-hidden rounded-md ring-2 transition ${active === i ? "ring-gold" : "ring-transparent hover:ring-border"}`}
@@ -62,14 +62,14 @@ function PropertyDetail() {
             </Carousel>
           )}
 
-          <div className="flex gap-2 mb-3 pt-6">
+          <div className="flex flex-wrap gap-2 mb-3 pt-6">
             <span className="bg-gold text-gold-foreground text-xs uppercase tracking-wider px-3 py-1 rounded-full">{p.listing === "achat" ? "À vendre" : "Location"}</span>
             <span className="bg-secondary text-secondary-foreground text-xs capitalize px-3 py-1 rounded-full">{p.type}</span>
           </div>
-          <h1 className="font-display text-4xl md:text-5xl mb-3">{p.title}</h1>
+          <h1 className="font-display text-3xl md:text-5xl mb-3">{p.title}</h1>
           <p className="flex items-center gap-2 text-muted-foreground mb-6"><MapPin className="h-4 w-4 text-gold" /> {p.district}, {p.city}</p>
 
-          <div className="flex flex-wrap gap-6 text-sm border-y border-border py-5 mb-8">
+          <div className="flex flex-wrap gap-4 md:gap-6 text-sm border-y border-border py-5 mb-8">
             {p.bedrooms > 0 && <span className="flex items-center gap-2"><BedDouble className="h-5 w-5 text-gold" /> {p.bedrooms} chambres</span>}
             {p.bathrooms > 0 && <span className="flex items-center gap-2"><Bath className="h-5 w-5 text-gold" /> {p.bathrooms} sdb</span>}
             <span className="flex items-center gap-2"><Maximize className="h-5 w-5 text-gold" /> {p.area} m²</span>
@@ -90,9 +90,9 @@ function PropertyDetail() {
           )}
         </div>
 
-        <aside className="lg:sticky lg:top-28 self-start bg-card border border-border rounded-lg p-6 shadow-lg">
+        <aside className="lg:sticky lg:top-28 self-start bg-card border border-border rounded-lg p-5 md:p-6 shadow-lg">
           <div className="text-sm text-muted-foreground">Prix</div>
-          <div className="font-display text-4xl text-ink mb-6">{formatPrice(p)}</div>
+          <div className="font-display text-3xl md:text-4xl text-ink mb-6 break-words">{formatPrice(p)}</div>
           <div className="space-y-3">
             <Button asChild variant="gold" size="lg" className="w-full">
               <a href={`https://wa.me/${wa}?text=${waMsg}`} target="_blank" rel="noreferrer">

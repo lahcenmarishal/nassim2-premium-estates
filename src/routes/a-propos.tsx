@@ -20,14 +20,14 @@ function AboutPage() {
   return (
     <>
       <PageHeader eyebrow="L'agence" title="À propos de Nassim2" subtitle="L'art de l'immobilier à El Jadida depuis plus de 15 ans." />
-      <section className="py-20 bg-background">
+      <section className="py-12 md:py-20 bg-background">
         <div className="container-page grid lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden rounded-lg">
             <img src={about} alt="El Jadida" loading="lazy" className="h-full w-full object-cover" />
           </div>
           <div>
             <span className="text-xs uppercase tracking-[0.3em] text-gold">Notre histoire</span>
-            <h2 className="font-display text-4xl md:text-5xl mt-3 mb-6">Une vision premium de l'immobilier</h2>
+            <h2 className="font-display text-3xl md:text-5xl mt-3 mb-6">Une vision premium de l'immobilier</h2>
             <p className="text-muted-foreground mb-4 leading-relaxed">
               Fondée à El Jadida, l'agence Nassim2 a bâti sa réputation sur la sélection rigoureuse de biens d'exception et la qualité d'un accompagnement entièrement personnalisé.
             </p>
@@ -41,7 +41,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-cream">
+      <section className="py-12 md:py-20 bg-cream">
         <div className="container-page">
           <div className="text-center mb-12">
             <span className="text-xs uppercase tracking-[0.3em] text-gold">Nos valeurs</span>
@@ -65,7 +65,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-ink text-primary-foreground">
+      <section className="py-12 md:py-20 bg-ink text-primary-foreground">
         <div className="container-page grid sm:grid-cols-3 gap-8 text-center">
           {[{ n: "15+", l: "Années d'expérience" }, { n: "500+", l: "Biens vendus" }, { n: "98%", l: "Clients satisfaits" }].map((s) => (
             <div key={s.l}>

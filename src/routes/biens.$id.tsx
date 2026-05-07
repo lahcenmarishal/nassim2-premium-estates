@@ -37,17 +37,23 @@ function PropertyDetail() {
         </Link>
       </div>
 
-      <div className="container-page grid md:grid-cols-[2fr_1fr] gap-3">
-        <div className="aspect-[4/3] overflow-hidden rounded-lg">
+      <div className="container-page space-y-3">
+        <div className="aspect-[16/9] overflow-hidden rounded-lg bg-muted">
           <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-1 gap-3">
-          {gallery.map((img, i) => (
-            <button key={i} onClick={() => setActive(i)} className={`aspect-[4/3] overflow-hidden rounded-lg ring-2 transition ${active === i ? "ring-gold" : "ring-transparent"}`}>
-              <img src={img} alt="" className="h-full w-full object-cover" />
-            </button>
-          ))}
-        </div>
+        {gallery.length > 1 && (
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+            {gallery.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`aspect-[4/3] overflow-hidden rounded-md ring-2 transition ${active === i ? "ring-gold" : "ring-transparent hover:ring-border"}`}
+              >
+                <img src={img} alt="" className="h-full w-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="container-page grid lg:grid-cols-[2fr_1fr] gap-12 py-12">

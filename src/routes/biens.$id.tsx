@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, BedDouble, Bath, Maximize, MapPin, Phone, MessageCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useProperty, useSiteSettings } from "@/hooks/useSiteData";
 import { formatPrice } from "@/lib/db-types";
 import fallback from "@/assets/property-1.jpg";
@@ -43,17 +44,22 @@ function PropertyDetail() {
             <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
           </div>
           {gallery.length > 1 && (
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-              {gallery.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className={`aspect-[4/3] overflow-hidden rounded-md ring-2 transition ${active === i ? "ring-gold" : "ring-transparent hover:ring-border"}`}
-                >
-                  <img src={img} alt="" className="h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
+            <Carousel opts={{ align: "start", dragFree: true }} className="relative px-10">
+              <CarouselContent className="-ml-2">
+                {gallery.map((img, i) => (
+                  <CarouselItem key={i} className="pl-2 basis-1/4">
+                    <button
+                      onClick={() => setActive(i)}
+                      className={`block w-full aspect-[4/3] overflow-hidden rounded-md ring-2 transition ${active === i ? "ring-gold" : "ring-transparent hover:ring-border"}`}
+                    >
+                      <img src={img} alt="" className="h-full w-full object-cover" />
+                    </button>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-0" />
+              <CarouselNext className="right-0" />
+            </Carousel>
           )}
 
           <div className="flex gap-2 mb-3 pt-6">

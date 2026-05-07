@@ -26,8 +26,8 @@ function ServicesPage() {
   return (
     <>
       <PageHeader eyebrow="Nos services" title="Un accompagnement complet" subtitle="De la recherche à la signature, nous gérons chaque étape avec rigueur et discrétion." />
-      <section className="py-20 bg-background">
-        <div className="container-page grid md:grid-cols-2 gap-8">
+      <section className="py-12 md:py-20 bg-background">
+        <div className="container-page grid sm:grid-cols-2 gap-6 md:gap-8">
           {services.map((s) => (
             <div key={s.title} className="bg-card border border-border rounded-lg p-8 hover:border-gold transition-all hover:shadow-xl">
               <div className="h-14 w-14 rounded-full bg-gold/10 flex items-center justify-center mb-6">

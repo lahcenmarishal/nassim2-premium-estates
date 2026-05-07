@@ -192,7 +192,7 @@ function PropertiesPanel() {
   if (editing) return <PropertyForm property={editing} onClose={() => { setEditing(null); load(); }} />;
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-display text-2xl">Biens immobiliers ({list.length})</h2>
         <Button variant="gold" onClick={() => setEditing(newProperty())}><Plus className="h-4 w-4" /> Ajouter</Button>
@@ -241,12 +241,12 @@ function PropertyForm({ property, onClose }: { property: DbProperty; onClose: ()
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8 space-y-4">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8 space-y-4">
       <div className="flex justify-between mb-4">
         <h2 className="font-display text-2xl">{p.id ? "Modifier" : "Nouveau bien"}</h2>
         <Button variant="outline" onClick={onClose}>Annuler</Button>
       </div>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4">
         <Field label="Titre *" value={p.title} onChange={(v) => setP({ ...p, title: v, slug: p.slug || v.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") })} />
         <Field label="Slug *" value={p.slug} onChange={(v) => setP({ ...p, slug: v })} />
         <Field label="Ville" value={p.city} onChange={(v) => setP({ ...p, city: v })} />
@@ -331,7 +331,7 @@ function MessagesPanel() {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8">
       <h2 className="font-display text-2xl mb-6">Messages reçus ({list.length})</h2>
       {list.length === 0 ? <p className="text-muted-foreground">Aucun message.</p> : (
         <div className="space-y-3">
@@ -381,7 +381,7 @@ function TestimonialsPanel() {
   if (editing) return <TestimonialForm t={editing} onClose={() => { setEditing(null); load(); }} />;
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-display text-2xl">Témoignages ({list.length})</h2>
         <Button variant="gold" onClick={() => setEditing(blank())}><Plus className="h-4 w-4" /> Ajouter</Button>
@@ -425,12 +425,12 @@ function TestimonialForm({ t, onClose }: { t: Testimonial; onClose: () => void }
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8 space-y-4">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8 space-y-4">
       <div className="flex justify-between mb-4">
         <h2 className="font-display text-2xl">{v.id ? "Modifier témoignage" : "Nouveau témoignage"}</h2>
         <Button variant="outline" onClick={onClose}>Annuler</Button>
       </div>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4">
         <Field label="Nom *" value={v.name} onChange={(x) => setV({ ...v, name: x })} />
         <Field label="Rôle / Statut" value={v.role || ""} onChange={(x) => setV({ ...v, role: x })} />
         <Field label="Note (1-5)" type="number" value={String(v.rating)} onChange={(x) => setV({ ...v, rating: Math.max(1, Math.min(5, Number(x))) })} />

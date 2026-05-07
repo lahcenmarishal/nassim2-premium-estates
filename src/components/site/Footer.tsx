@@ -12,7 +12,7 @@ export function Footer() {
   const fb = settings?.facebook_url || "#";
   return (
     <footer className="bg-ink text-primary-foreground mt-24">
-      <div className="container-page py-16 grid gap-12 md:grid-cols-4">
+      <div className="container-page py-12 md:py-16 grid gap-10 md:gap-12 sm:grid-cols-2 md:grid-cols-4">
         <div className="md:col-span-1">
           <img src={logo} alt="Nassim2" className="h-20 w-auto mb-4 bg-white rounded-md p-2" />
           <p className="text-sm text-white/70 leading-relaxed">

@@ -35,15 +35,15 @@ function AdminPage() {
   );
 
   return (
-    <div className="min-h-screen bg-cream pt-28 pb-20">
+    <div className="min-h-screen bg-cream pt-24 md:pt-28 pb-20">
       <Toaster />
       <div className="container-page">
         <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
           <div>
-            <h1 className="font-display text-4xl">Administration</h1>
+            <h1 className="font-display text-3xl md:text-4xl">Administration</h1>
             <p className="text-sm text-muted-foreground">{user.email}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <Button asChild variant="outline"><Link to="/">Voir le site</Link></Button>
             <Button variant="ink" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/login" }); }}>
               <LogOut className="h-4 w-4" /> Déconnexion
@@ -51,7 +51,7 @@ function AdminPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 border-b border-border mb-8 flex-wrap">
+        <div className="flex gap-1 md:gap-2 border-b border-border mb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap">
           {([
             ["hero", "Hero & Images"],
             ["contact-info", "Coordonnées"],
@@ -59,7 +59,7 @@ function AdminPage() {
             ["testimonials", "Témoignages"],
             ["messages", "Messages"],
           ] as [Tab, string][]).map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k)} className={`px-4 py-3 text-sm font-medium transition border-b-2 ${tab === k ? "border-gold text-gold" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
+            <button key={k} onClick={() => setTab(k)} className={`px-3 md:px-4 py-3 text-sm font-medium transition border-b-2 whitespace-nowrap ${tab === k ? "border-gold text-gold" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
               {l}
             </button>
           ))}
@@ -104,9 +104,9 @@ function HeroPanel() {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8 space-y-6">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8 space-y-6">
       <div>
-        <h2 className="font-display text-2xl mb-4">Section Hero</h2>
+        <h2 className="font-display text-xl md:text-2xl mb-4">Section Hero</h2>
         <label className="text-xs uppercase tracking-widest text-muted-foreground">Titre</label>
         <input value={s.hero_title} onChange={(e) => setS({ ...s, hero_title: e.target.value })} className="mt-2 w-full h-11 px-4 border border-border rounded-md bg-background" />
         <label className="text-xs uppercase tracking-widest text-muted-foreground block mt-4">Sous-titre</label>
@@ -116,8 +116,8 @@ function HeroPanel() {
         </div>
       </div>
       <div className="border-t border-border pt-6">
-        <h2 className="font-display text-2xl mb-4">Section "Pourquoi Nassim2"</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <h2 className="font-display text-xl md:text-2xl mb-4">Section "Pourquoi Nassim2"</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <ImageUpload bucket="site-images" label="Image 1 (grande)" value={s.why_image_1_url} onChange={(url) => setS({ ...s, why_image_1_url: url })} />
           <ImageUpload bucket="site-images" label="Image 2" value={s.why_image_2_url} onChange={(url) => setS({ ...s, why_image_2_url: url })} />
           <ImageUpload bucket="site-images" label="Image 3" value={s.why_image_3_url} onChange={(url) => setS({ ...s, why_image_3_url: url })} />
@@ -154,7 +154,7 @@ function ContactInfoPanel() {
   ];
 
   return (
-    <div className="bg-card border border-border rounded-lg p-8 space-y-4">
+    <div className="bg-card border border-border rounded-lg p-5 md:p-8 space-y-4">
       <h2 className="font-display text-2xl mb-4">Coordonnées du site</h2>
       {fields.map(([k, label, ph]) => (
         <div key={k}>

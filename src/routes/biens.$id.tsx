@@ -37,28 +37,26 @@ function PropertyDetail() {
         </Link>
       </div>
 
-      <div className="container-page space-y-3">
-        <div className="aspect-[16/9] overflow-hidden rounded-lg bg-muted">
-          <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
-        </div>
-        {gallery.length > 1 && (
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-            {gallery.map((img, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={`aspect-[4/3] overflow-hidden rounded-md ring-2 transition ${active === i ? "ring-gold" : "ring-transparent hover:ring-border"}`}
-              >
-                <img src={img} alt="" className="h-full w-full object-cover" />
-              </button>
-            ))}
+      <div className="container-page grid lg:grid-cols-[2fr_1fr] gap-12 py-6">
+        <div className="space-y-3">
+          <div className="aspect-[16/9] overflow-hidden rounded-lg bg-muted">
+            <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
           </div>
-        )}
-      </div>
+          {gallery.length > 1 && (
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+              {gallery.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  className={`aspect-[4/3] overflow-hidden rounded-md ring-2 transition ${active === i ? "ring-gold" : "ring-transparent hover:ring-border"}`}
+                >
+                  <img src={img} alt="" className="h-full w-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
 
-      <div className="container-page grid lg:grid-cols-[2fr_1fr] gap-12 py-12">
-        <div>
-          <div className="flex gap-2 mb-3">
+          <div className="flex gap-2 mb-3 pt-6">
             <span className="bg-gold text-gold-foreground text-xs uppercase tracking-wider px-3 py-1 rounded-full">{p.listing === "achat" ? "À vendre" : "Location"}</span>
             <span className="bg-secondary text-secondary-foreground text-xs capitalize px-3 py-1 rounded-full">{p.type}</span>
           </div>

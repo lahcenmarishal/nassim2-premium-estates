@@ -60,8 +60,8 @@ function ContactPage() {
     <>
       <Toaster />
       <PageHeader eyebrow="Contact" title="Parlons de votre projet" subtitle="Notre équipe est à votre écoute du lundi au samedi." />
-      <section className="py-20 bg-background">
-        <div className="container-page grid lg:grid-cols-[1fr_1.2fr] gap-12">
+      <section className="py-12 md:py-20 bg-background">
+        <div className="container-page grid lg:grid-cols-[1fr_1.2fr] gap-10 md:gap-12">
           <div>
             <h2 className="font-display text-3xl mb-8">Coordonnées</h2>
             <ul className="space-y-6">
@@ -100,7 +100,7 @@ function ContactPage() {
             </div>
           </div>
 
-          <form onSubmit={onSubmit} className="bg-card border border-border rounded-lg p-8 shadow-lg">
+          <form onSubmit={onSubmit} className="bg-card border border-border rounded-lg p-5 md:p-8 shadow-lg">
             <h2 className="font-display text-3xl mb-2">Envoyer un message</h2>
             <p className="text-sm text-muted-foreground mb-8">Réponse sous 24h ouvrées.</p>
             <div className="grid gap-5">

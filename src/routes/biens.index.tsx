@@ -34,7 +34,7 @@ function BiensPage() {
       <PageHeader eyebrow="Catalogue" title="Biens immobiliers" subtitle="Une sélection rigoureuse de propriétés à El Jadida et ses environs." />
       <section className="py-12 bg-background">
         <div className="container-page">
-          <div className="grid md:grid-cols-3 gap-3 mb-10 p-4 bg-card border border-border rounded-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10 p-4 bg-card border border-border rounded-lg">
             <select value={listing} onChange={(e) => setListing(e.target.value)} className="h-11 px-4 rounded-md border border-border bg-background">
               <option value="all">Achat & Location</option>
               <option value="achat">À vendre</option>
@@ -61,7 +61,7 @@ function BiensPage() {
           ) : filtered.length === 0 ? (
             <p className="text-center text-muted-foreground py-20">Aucun bien ne correspond à votre recherche.</p>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {filtered.map((p) => <PropertyCard key={p.id} p={p} />)}
             </div>
           )}

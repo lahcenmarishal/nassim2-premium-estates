@@ -28,7 +28,12 @@ export function useProperties(opts?: { featured?: boolean; limit?: number }) {
   const [properties, setProperties] = useState<DbProperty[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    let q = supabase.from("properties").select("*").eq("published", true).order("created_at", { ascending: false });
+    let q = supabase
+      .from("properties")
+      .select("*")
+      .eq("published", true)
+      .order("featured", { ascending: false })
+      .order("created_at", { ascending: false });
     if (opts?.featured) q = q.eq("featured", true);
     if (opts?.limit) q = q.limit(opts.limit);
     q.then(({ data }) => {

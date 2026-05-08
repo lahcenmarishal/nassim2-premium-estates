@@ -289,7 +289,13 @@ function PropertyForm({ property, onClose }: { property: DbProperty; onClose: ()
               <button onClick={() => setP({ ...p, gallery: p.gallery.filter((_, idx) => idx !== i) })} className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1"><Trash2 className="h-3 w-3" /></button>
             </div>
           ))}
-          <ImageUpload bucket="property-images" value={null} onChange={addGalleryImage} />
+          <ImageUpload
+            bucket="property-images"
+            value={null}
+            onChange={addGalleryImage}
+            multiple
+            onUploaded={(urls) => setP({ ...p, gallery: [...p.gallery, ...urls] })}
+          />
         </div>
       </div>
 

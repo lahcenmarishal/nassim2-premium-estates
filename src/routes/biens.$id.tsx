@@ -27,7 +27,11 @@ function PropertyDetail() {
 
   const wa = settings?.whatsapp || "212661765804";
   const phone = settings?.phone || "+212 661 765 804";
-  const gallery = p.gallery.length > 0 ? p.gallery : (p.image_url ? [p.image_url] : [fallback]);
+  const baseGallery = p.gallery && p.gallery.length > 0 ? p.gallery : [];
+  const withMain = p.image_url
+    ? [p.image_url, ...baseGallery.filter((g) => g !== p.image_url)]
+    : baseGallery;
+  const gallery = withMain.length > 0 ? withMain : [fallback];
   const waMsg = encodeURIComponent(`Bonjour, je suis intéressé(e) par : ${p.title}`);
 
   return (

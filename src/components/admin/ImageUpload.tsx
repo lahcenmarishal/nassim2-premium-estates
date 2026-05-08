@@ -8,25 +8,44 @@ interface Props {
   value?: string | null;
   onChange: (url: string | null) => void;
   label?: string;
+  multiple?: boolean;
+  onUploaded?: (urls: string[]) => void;
 }
 
-export function ImageUpload({ bucket, value, onChange, label }: Props) {
+export function ImageUpload({ bucket, value, onChange, label, multiple, onUploaded }: Props) {
   const [uploading, setUploading] = useState(false);
 
-  const upload = async (file: File) => {
-    setUploading(true);
+  const uploadOne = async (file: File): Promise<string | null> => {
     const ext = file.name.split(".").pop();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
     const { error } = await supabase.storage.from(bucket).upload(path, file);
     if (error) {
       toast.error("Upload échoué : " + error.message);
-      setUploading(false);
-      return;
+      return null;
     }
-    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    onChange(data.publicUrl);
+    return supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+  };
+
+  const handleFiles = async (files: FileList) => {
+    setUploading(true);
+    if (multiple) {
+      const urls: string[] = [];
+      for (const f of Array.from(files)) {
+        const url = await uploadOne(f);
+        if (url) urls.push(url);
+      }
+      if (urls.length) {
+        onUploaded?.(urls);
+        toast.success(`${urls.length} image(s) uploadée(s)`);
+      }
+    } else {
+      const url = await uploadOne(files[0]);
+      if (url) {
+        onChange(url);
+        toast.success("Image uploadée");
+      }
+    }
     setUploading(false);
-    toast.success("Image uploadée");
   };
 
   return (
@@ -42,8 +61,8 @@ export function ImageUpload({ bucket, value, onChange, label }: Props) {
       ) : (
         <label className="inline-flex flex-col items-center justify-center h-32 w-32 border-2 border-dashed border-border rounded-md cursor-pointer hover:border-gold transition">
           <Upload className="h-5 w-5 text-muted-foreground mb-1" />
-          <span className="text-xs text-muted-foreground">{uploading ? "..." : "Choisir"}</span>
-          <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+          <span className="text-xs text-muted-foreground text-center px-2">{uploading ? "..." : multiple ? "Choisir plusieurs" : "Choisir"}</span>
+          <input type="file" accept="image/*" multiple={multiple} className="hidden" onChange={(e) => e.target.files && e.target.files.length > 0 && handleFiles(e.target.files)} />
         </label>
       )}
     </div>

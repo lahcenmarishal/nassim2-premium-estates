@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import type { SiteSettings, DbProperty, ContactMessage, Testimonial } from "@/lib/db-types";
-import { LogOut, Plus, Trash2, Edit, Check, Mail, MailOpen, Star } from "lucide-react";
+import { LogOut, Plus, Trash2, Edit, Check, Mail, MailOpen, Star, Phone, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -320,11 +320,16 @@ function Field({ label, value, onChange, type = "text" }: { label: string; value
 
 function MessagesPanel() {
   const [list, setList] = useState<ContactMessage[]>([]);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const load = () => {
     supabase.from("contact_messages").select("*").order("created_at", { ascending: false })
       .then(({ data }) => setList((data as ContactMessage[]) || []));
   };
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    supabase.from("site_settings").select("*").maybeSingle()
+      .then(({ data }) => setSettings(data as SiteSettings | null));
+  }, []);
 
   const toggleRead = async (m: ContactMessage) => {
     await supabase.from("contact_messages").update({ read: !m.read }).eq("id", m.id);
@@ -339,9 +344,19 @@ function MessagesPanel() {
   return (
     <div className="bg-card border border-border rounded-lg p-5 md:p-8">
       <h2 className="font-display text-2xl mb-6">Messages reçus ({list.length})</h2>
+      {settings && (
+        <p className="text-xs text-muted-foreground mb-4">
+          Réponses envoyées depuis : {settings.email || "—"} · {settings.phone || "—"} · WhatsApp {settings.whatsapp || "—"}
+        </p>
+      )}
       {list.length === 0 ? <p className="text-muted-foreground">Aucun message.</p> : (
         <div className="space-y-3">
-          {list.map((m) => (
+          {list.map((m) => {
+            const subject = encodeURIComponent(m.subject ? `Re: ${m.subject}` : "Re: votre message");
+            const intro = `Bonjour ${m.name},%0D%0A%0D%0AMerci pour votre message.%0D%0A%0D%0A`;
+            const waNumber = (settings?.whatsapp || "").replace(/[^0-9]/g, "");
+            const waText = encodeURIComponent(`Bonjour ${m.name}, merci pour votre message concernant : ${m.message.slice(0, 80)}`);
+            return (
             <div key={m.id} className={`p-4 border rounded-md ${m.read ? "border-border" : "border-gold bg-gold/5"}`}>
               <div className="flex items-start justify-between gap-4 mb-2">
                 <div>
@@ -355,8 +370,30 @@ function MessagesPanel() {
                 </div>
               </div>
               <p className="text-sm whitespace-pre-line">{m.message}</p>
+              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border">
+                <Button asChild size="sm" variant="gold">
+                  <a href={`mailto:${m.email}?subject=${subject}&body=${intro}`} onClick={() => !m.read && toggleRead(m)}>
+                    <Mail className="h-3 w-3" /> Répondre par email
+                  </a>
+                </Button>
+                {m.phone && (
+                  <Button asChild size="sm" variant="outline">
+                    <a href={`tel:${m.phone.replace(/\s/g, "")}`}>
+                      <Phone className="h-3 w-3" /> Appeler
+                    </a>
+                  </Button>
+                )}
+                {m.phone && waNumber && (
+                  <Button asChild size="sm" variant="outline">
+                    <a href={`https://wa.me/${m.phone.replace(/[^0-9]/g, "")}?text=${waText}`} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="h-3 w-3" /> WhatsApp
+                    </a>
+                  </Button>
+                )}
+              </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

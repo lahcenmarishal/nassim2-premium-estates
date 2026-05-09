@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import type { SiteSettings, DbProperty, ContactMessage, Testimonial } from "@/lib/db-types";
-import { LogOut, Plus, Trash2, Edit, Check, Mail, MailOpen, Star } from "lucide-react";
+import { LogOut, Plus, Trash2, Edit, Check, Mail, MailOpen, Star, Phone, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
